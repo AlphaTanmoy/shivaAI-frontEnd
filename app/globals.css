@@ -1,0 +1,4 @@
+/* @tailwind directives must be processed by Tailwind CLI */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
