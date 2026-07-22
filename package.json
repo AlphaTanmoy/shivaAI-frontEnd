@@ -11,13 +11,22 @@
   "private": true,
   "packageManager": "npm@11.13.0",
   "dependencies": {
+    "@angular/cdk": "^22.0.5",
     "@angular/common": "^22.0.0",
     "@angular/compiler": "^22.0.0",
     "@angular/core": "^22.0.0",
     "@angular/forms": "^22.0.0",
+    "@angular/material": "^22.0.5",
     "@angular/platform-browser": "^22.0.0",
     "@angular/router": "^22.0.0",
+    "@fortawesome/fontawesome-free": "^7.3.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "marked": "^18.0.7",
+    "ngx-markdown": "^22.0.0",
+    "postcss": "^8.5.22",
+    "prismjs": "^1.30.0",
     "rxjs": "~7.8.0",
+    "tailwindcss": "^4.3.3",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
