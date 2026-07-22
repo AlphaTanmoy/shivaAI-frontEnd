@@ -1,20 +1,18 @@
-import { Component, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-navbar',
-    standalone: true,
-    imports: [CommonModule],
-    templateUrl: './navbar.html',
-    styleUrl: './navbar.scss'
+  selector: 'app-navbar',
+  standalone: true,
+  imports: [],
+  templateUrl: './navbar.html',
+  styleUrl: './navbar.scss'
 })
 export class NavbarComponent {
 
-    isScrolled = false;
+  mobileMenuOpen = false;
 
-    @HostListener('window:scroll')
-    onScroll(): void {
-        this.isScrolled = window.scrollY > 20;
-    }
+  toggleMenu() {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
 
 }
