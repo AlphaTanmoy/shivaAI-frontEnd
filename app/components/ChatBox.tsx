@@ -1,85 +1,79 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { endpoints } from "@/app/lib/api";
 
 type Message = {
   role: "user" | "bot";
   text: string;
 };
 
-const WS_URL = "ws://localhost:8080/ws/chat";
+type ChatApiResponse = {
+  message?: string;
+  text?: string;
+  reply?: string;
+  content?: string;
+};
 
 export default function ChatBox() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
-  const [connected, setConnected] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [connected, setConnected] = useState(true);
   const [connectionError, setConnectionError] = useState<string | null>(null);
 
-  const socketRef = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const ws = new WebSocket(WS_URL);
-
-    ws.onopen = () => {
-      console.log("🔥 WebSocket Connected");
-      setConnected(true);
-      setConnectionError(null);
-    };
-
-    ws.onmessage = (event) => {
-      setMessages((prev) => [...prev, { role: "bot", text: event.data }]);
-      setLoading(false);
-    };
-
-    ws.onclose = (event) => {
-      console.log("❌ WebSocket Disconnected", event);
-      setConnected(false);
-      setConnectionError(
-        `WebSocket disconnected (${event.code}${event.reason ? `: ${event.reason}` : ""}). Refresh to reconnect.`
-      );
-      setLoading(false);
-    };
-
-    ws.onerror = (event) => {
-      console.error("WebSocket error", event);
-      setConnectionError(
-        "WebSocket error occurred. Confirm the backend is running and /ws/chat is reachable."
-      );
-    };
-
-    socketRef.current = ws;
-
-    return () => {
-      ws.close();
-    };
-  }, []);
-
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = () => {
+  const extractBotText = (payload: ChatApiResponse | string | null | undefined) => {
+    if (!payload) return "No response received.";
+
+    if (typeof payload === "string") {
+      return payload;
+    }
+
+    return payload.message ?? payload.text ?? payload.reply ?? payload.content ?? "No response received.";
+  };
+
+  const sendMessage = async () => {
     const trimmed = message.trim();
     if (!trimmed) return;
 
-    const ws = socketRef.current;
-    if (!ws || ws.readyState !== WebSocket.OPEN) {
-      setConnectionError("WebSocket not connected.");
-      console.error("WebSocket not connected");
-      return;
-    }
-
-    const payload = JSON.stringify({ message: trimmed });
     setMessages((prev) => [...prev, { role: "user", text: trimmed }]);
     setMessage("");
     setLoading(true);
-    setError(null);
+    setConnectionError(null);
+    setConnected(true);
 
-    ws.send(payload);
+    try {
+      const response = await fetch(endpoints.chat, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: trimmed }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const data = (await response.json()) as ChatApiResponse;
+      const botText = extractBotText(data);
+      setMessages((prev) => [...prev, { role: "bot", text: botText }]);
+    } catch (error) {
+      console.error("Chat request failed", error);
+      setConnectionError("Unable to reach the chat backend. Check that your Spring app is running on port 9669.");
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", text: "Sorry, I couldn’t reach the chat service right now." },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -105,14 +99,14 @@ export default function ChatBox() {
       {/* HEADER */}
       <div style={{ marginBottom: 14 }}>
         <div style={{ color: "#7dfcff", fontSize: 17, fontWeight: 700 }}>
-          ShivaGPT (WS)
+          ShivaGPT
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
           <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 12 }}>
-            Real-time divine connection 🔱
+            REST chat connection 🔱
           </div>
           <div style={{ color: connectionError ? "#f87171" : connected ? "#34d399" : "#fbbf24", fontSize: 12 }}>
-            {connectionError ?? (connected ? (loading ? "Sending..." : "Connected") : "Connecting...")}
+            {connectionError ?? (loading ? "Sending..." : "Connected")}
           </div>
         </div>
       </div>
@@ -164,8 +158,8 @@ export default function ChatBox() {
         <input
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder={connected ? "Ask Shiva..." : "Connecting to WebSocket..."}
-          disabled={!connected}
+          placeholder="Ask Shiva..."
+          disabled={loading}
           style={{
             flex: 1,
             padding: "14px",
@@ -174,7 +168,7 @@ export default function ChatBox() {
             background: "rgba(15,23,42,0.95)",
             color: "white",
             outline: "none",
-            opacity: connected ? 1 : 0.6,
+            opacity: 1,
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") sendMessage();
@@ -183,15 +177,15 @@ export default function ChatBox() {
 
         <button
           onClick={sendMessage}
-          disabled={!connected || loading}
+          disabled={loading}
           style={{
             padding: "0 18px",
             borderRadius: 16,
             border: "none",
             background: "#38bdf8",
             fontWeight: 700,
-            cursor: !connected || loading ? "not-allowed" : "pointer",
-            opacity: !connected || loading ? 0.6 : 1,
+            cursor: loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.6 : 1,
           }}
         >
           Send
