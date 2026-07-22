@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../services/chat.service';
 
@@ -14,7 +18,7 @@ interface Message {
   templateUrl: './chat.html',
   styleUrl: './chat.scss'
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
 
   message = '';
 
@@ -28,8 +32,25 @@ export class ChatComponent {
   ];
 
   constructor(
-    private chatService: ChatService
+    private chatService: ChatService,
+    private cdr: ChangeDetectorRef
   ) {}
+
+  ngOnInit(): void {
+
+    const message = history.state.message;
+
+    if (typeof message === 'string' && message.trim()) {
+
+      this.message = message.trim();
+
+      setTimeout(() => {
+        this.sendMessage();
+      });
+
+    }
+
+  }
 
   sendMessage(): void {
 
@@ -48,11 +69,13 @@ export class ChatComponent {
 
     this.loading = true;
 
+    this.cdr.detectChanges();
+
     this.chatService.sendMessage({
       message: userMessage
     }).subscribe({
 
-      next: (response) => {
+      next: async (response) => {
 
         const aiMessage: Message = {
           role: 'ai',
@@ -61,9 +84,13 @@ export class ChatComponent {
 
         this.messages.push(aiMessage);
 
+        this.cdr.detectChanges();
+
+        await this.typeWriter(response.answer, aiMessage);
+
         this.loading = false;
 
-        this.animateResponse(response.answer, aiMessage);
+        this.cdr.detectChanges();
 
       },
 
@@ -76,46 +103,55 @@ export class ChatComponent {
 
         this.loading = false;
 
+        this.cdr.detectChanges();
+
       }
 
     });
 
   }
 
-  private animateResponse(
-    fullText: string,
+  private async typeWriter(
+    text: string,
     message: Message
-  ): void {
+  ): Promise<void> {
 
-    let index = 0;
+    message.content = '';
 
-    const typeNextCharacter = () => {
+    for (const char of text) {
 
-      if (index >= fullText.length) {
-        return;
+      message.content += char;
+
+      this.cdr.detectChanges();
+
+      let delay = 38;
+
+      switch (char) {
+
+        case '.':
+        case '!':
+        case '?':
+          delay = 150;
+          break;
+
+        case ',':
+          delay = 70;
+          break;
+
+        case ' ':
+          delay = 8;
+          break;
+
       }
 
-      message.content += fullText[index];
-      index++;
+      await this.sleep(delay);
 
-      let delay = 18;
+    }
 
-      const currentChar = fullText[index - 1];
+  }
 
-      if (currentChar === '.' || currentChar === '!' || currentChar === '?') {
-        delay = 180;
-      } else if (currentChar === ',') {
-        delay = 80;
-      } else if (currentChar === ' ') {
-        delay = 8;
-      }
-
-      setTimeout(typeNextCharacter, delay);
-
-    };
-
-    typeNextCharacter();
-
+  private sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
 }

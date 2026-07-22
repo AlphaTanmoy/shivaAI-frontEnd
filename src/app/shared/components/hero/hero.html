@@ -1,17 +1,14 @@
-<section
-    class="relative flex min-h-screen items-center overflow-hidden bg-gray-950 px-6 pt-24">
+<section class="relative flex min-h-screen items-center overflow-hidden bg-gray-950 px-6 pt-24">
 
 
     <!-- Background Glow -->
 
-    <div
-        class="absolute left-1/2 top-20 h-96 w-96 -translate-x-1/2 rounded-full bg-green-600/20 blur-3xl">
+    <div class="absolute left-1/2 top-20 h-96 w-96 -translate-x-1/2 rounded-full bg-green-600/20 blur-3xl">
     </div>
 
 
 
-    <div
-        class="relative mx-auto grid max-w-7xl gap-16 lg:grid-cols-2">
+    <div class="relative mx-auto grid max-w-7xl gap-16 lg:grid-cols-2">
 
 
         <!-- Left Content -->
@@ -28,8 +25,7 @@
 
 
 
-            <h1
-                class="text-5xl font-extrabold leading-tight text-white md:text-6xl">
+            <h1 class="text-5xl font-extrabold leading-tight text-white md:text-6xl">
 
 
                 Seek Wisdom.
@@ -43,8 +39,7 @@
 
 
 
-            <p
-                class="mt-6 max-w-xl text-lg leading-relaxed text-gray-400">
+            <p class="mt-6 max-w-xl text-lg leading-relaxed text-gray-400">
 
 
                 Explore ancient wisdom, scriptures, and spiritual
@@ -120,8 +115,7 @@
         <div class="flex items-center justify-center">
 
 
-            <div
-                class="w-full max-w-md rounded-3xl border border-gray-800 bg-gray-900/70 p-6 shadow-2xl backdrop-blur">
+            <div class="w-full max-w-md rounded-3xl border border-gray-800 bg-gray-900/70 p-6 shadow-2xl backdrop-blur">
 
 
                 <!-- Header -->
@@ -157,8 +151,7 @@
 
                 <!-- Chat -->
 
-                <div
-                    class="rounded-2xl bg-gray-800 p-4 text-gray-300">
+                <div class="rounded-2xl bg-gray-800 p-4 text-gray-300">
 
 
                     "What is the meaning of life according to
@@ -169,8 +162,7 @@
 
 
 
-                <div
-                    class="mt-4 rounded-2xl bg-green-600/20 p-4 text-green-300">
+                <div class="mt-4 rounded-2xl bg-green-600/20 p-4 text-green-300">
 
 
                     "Life is a journey of awareness,
@@ -185,21 +177,18 @@
                 <!-- Input -->
 
 
-                <div
-                    class="mt-6 flex items-center rounded-xl border border-gray-700 bg-gray-950 px-4 py-3">
+                <div class="mt-6 flex items-center rounded-xl border border-gray-700 bg-gray-950 px-2 py-2">
 
+                    <input [(ngModel)]="prompt" (keyup.enter)="startChat()"
+                        class="flex-1 bg-transparent px-3 py-2 text-white outline-none placeholder:text-gray-500"
+                        placeholder="Ask Shiva AI..." />
 
-                    <span class="flex-1 text-gray-500">
+                    <button (click)="startChat()"
+                        class="rounded-lg bg-green-600 px-4 py-2 text-white transition hover:bg-green-700">
 
-                        Ask Shiva AI...
-
-                    </span>
-
-
-                    <span class="text-green-500">
                         ➤
-                    </span>
 
+                    </button>
 
                 </div>
 
