@@ -1,8 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  NgZone
+} from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { BackendStatusService } from '../../../features/chat/services/BackendStatusService';
+import { HealthService } from '../../../core/services/HealthService';
+
 
 @Component({
   selector: 'app-hero',
@@ -19,53 +26,64 @@ export class HeroComponent implements OnInit {
 
   checkingConnection = true;
 
+
   constructor(
     private router: Router,
-    private backendStatusService: BackendStatusService
-  ) { }
+    private healthService: HealthService,
+    private zone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {}
+
 
   ngOnInit(): void {
 
-    this.backendStatusService.backendStatus$
+    this.healthService.backendStatus$
       .subscribe(status => {
 
-        console.log("Backend Status:", status);
+        this.zone.run(() => {
 
-        this.isBackendOnline = status;
+          this.isBackendOnline = status;
+
+          this.cdr.markForCheck();
+
+        });
 
       });
 
-    this.backendStatusService.checking$
+
+    this.healthService.checking$
       .subscribe(checking => {
 
-        console.log("Checking:", checking);
+        this.zone.run(() => {
 
-        this.checkingConnection = checking;
+          this.checkingConnection = checking;
+
+          this.cdr.markForCheck();
+
+        });
 
       });
 
   }
 
+
+
   startChat(): void {
 
     if (!this.isBackendOnline) {
-
       return;
-
     }
+
 
     if (!this.prompt.trim()) {
-
       return;
-
     }
+
 
     this.router.navigate(['/chat'], {
 
       state: {
-
         message: this.prompt
-
       }
 
     });

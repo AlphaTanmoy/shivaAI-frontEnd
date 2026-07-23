@@ -28,14 +28,14 @@ export class NotificationService {
 
         this.notificationSubject.next(data);
 
-        // Auto close after 5 seconds only when there is no action button
+        // Auto close after 2 seconds only when there is no action button
         if (data.action == null) {
 
             this.autoCloseTimer = setTimeout(() => {
 
                 this.close();
 
-            }, 5000);
+            }, 2000);
 
         }
 

@@ -34,9 +34,13 @@
                 Contact
             </a>
 
-            <button routerLink="/chat"
-                class="rounded-xl bg-green-600 px-5 py-2 font-semibold text-white transition hover:bg-green-700">
-                Start Chat
+            <button routerLink="/chat" [disabled]="!isBackendOnline"
+                class="rounded-xl px-5 py-2 font-semibold text-white transition disabled:cursor-not-allowed"
+                [class.bg-green-600]="isBackendOnline" [class.hover:bg-green-700]="isBackendOnline"
+                [class.bg-red-600]="!isBackendOnline" [class.hover:bg-red-700]="!isBackendOnline">
+
+                {{ isBackendOnline ? 'Start Chat' : 'Backend Offline' }}
+
             </button>
 
         </div>

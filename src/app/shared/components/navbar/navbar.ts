@@ -1,5 +1,12 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  NgZone
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
+
+import { HealthService } from '../../../core/services/HealthService';
 
 @Component({
   selector: 'app-navbar',
@@ -8,12 +15,34 @@ import { RouterLink } from '@angular/router';
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
 
   mobileMenuOpen = false;
 
-  toggleMenu() {
+  isBackendOnline = false;
+
+  constructor(
+    private healthService: HealthService,
+    private zone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) { }
+
+  ngOnInit() {
+
+    this.healthService.backendStatus$
+      .subscribe(status => {
+
+        this.isBackendOnline = status;
+
+      });
+
+  }
+
+
+  toggleMenu(): void {
+
     this.mobileMenuOpen = !this.mobileMenuOpen;
+
   }
 
 }
