@@ -6,8 +6,8 @@ import {
 } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
+import { HealthService } from '../../services/HealthService';
 
-import { HealthService } from '../../../core/services/HealthService';
 
 
 @Component({

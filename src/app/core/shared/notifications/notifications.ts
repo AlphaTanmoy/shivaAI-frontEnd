@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NotificationData } from '../../../core/models/notification.model';
-import { NotificationService } from '../../../core/services/NotificationService';
+import { NotificationData } from '../../models/notification.model';
+import { NotificationService } from '../../services/NotificationService';
 import { CommonModule } from '@angular/common';
 
 

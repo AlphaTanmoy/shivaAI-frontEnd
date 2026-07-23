@@ -20,6 +20,7 @@ import {
 } from 'rxjs/operators';
 import { CountryService } from '../../services/CountryService';
 import { CountryResponse } from '../../response/CountryResponse';
+import { SingleSelectDropdownComponent } from '../../shared/custom-dropdown/single-select-dropdown';
 
 
 @Component({
@@ -27,7 +28,8 @@ import { CountryResponse } from '../../response/CountryResponse';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    SingleSelectDropdownComponent
   ],
   templateUrl: './countries.html',
   styleUrls: ['./countries.scss']
@@ -47,6 +49,23 @@ export class CountryComponent
   searchText = '';
 
   serviceable?: boolean;
+
+  selectedServiceableValue: string | null = '';
+
+  readonly serviceableOptions = [
+    {
+      label: 'All Countries',
+      value: ''
+    },
+    {
+      label: 'Serviceable',
+      value: 'true'
+    },
+    {
+      label: 'Non Serviceable',
+      value: 'false'
+    }
+  ];
 
   readonly pageSize = 20;
 
@@ -101,9 +120,11 @@ export class CountryComponent
   /**
    * Serviceable Filter
    */
-  onServiceableChange(value: any): void {
+  onServiceableChange(value: string | null): void {
 
-    if (value === '') {
+    this.selectedServiceableValue = value;
+
+    if (value === '' || value === null) {
 
       this.serviceable = undefined;
 

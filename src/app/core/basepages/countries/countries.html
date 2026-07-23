@@ -29,22 +29,13 @@
 
         <div class="filter-box">
 
-            <select
-                (change)="onServiceableChange($any($event.target).value)">
-
-                <option value="">
-                    All Countries
-                </option>
-
-                <option value="true">
-                    Serviceable
-                </option>
-
-                <option value="false">
-                    Non Serviceable
-                </option>
-
-            </select>
+            <app-single-select-dropdown
+                label="Serviceable"
+                placeholder="All Countries"
+                [options]="serviceableOptions"
+                [selectedValue]="selectedServiceableValue"
+                (selectionChange)="onServiceableChange($event)">
+            </app-single-select-dropdown>
 
         </div>
 

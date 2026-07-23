@@ -1,0 +1,73 @@
+.select-shell {
+  position: relative;
+  width: 100%;
+}
+
+.select-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #d9dfeb;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 12px 14px;
+  cursor: pointer;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.select-label {
+  font-size: 12px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.select-value {
+  flex: 1;
+  text-align: left;
+}
+
+.select-arrow {
+  color: #10A37F;
+  font-size: 18px;
+}
+
+.select-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+}
+
+.select-item {
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  border: none;
+  background: #ffffff;
+  cursor: pointer;
+  color: #0f172a;
+}
+
+.select-item:hover {
+  background: #f3faf8;
+}
+
+.select-item.active {
+  background: rgba(16, 163, 127, 0.12);
+  color: #0d8f70;
+  font-weight: 700;
+}
+
+.select-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
