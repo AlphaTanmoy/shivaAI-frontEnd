@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, timeout } from 'rxjs';
 
 import {
   ChatRequest,
   ChatResponse
 } from '../models/chat.model';
+import { API } from '../../../core/constants/api-list';
 
 
 @Injectable({
@@ -14,25 +15,27 @@ import {
 export class ChatService {
 
 
-  private apiUrl = 'http://localhost:9669/api/chat';
-
-
   constructor(
     private http: HttpClient
-  ){}
+  ) { }
 
 
 
   sendMessage(
     request: ChatRequest
-  ): Observable<ChatResponse>{
+  ): Observable<ChatResponse> {
 
     return this.http.post<ChatResponse>(
-      this.apiUrl,
+      API.CHAT,
       request
     );
 
   }
 
+  checkConnection() {
+
+    return this.http.get(API.HEALTH);
+
+  }
 
 }

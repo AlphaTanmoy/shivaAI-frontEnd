@@ -137,8 +137,16 @@
                             Shiva AI
                         </h3>
 
-                        <p class="text-sm text-green-400">
-                            Online
+                        <p class="text-sm" [class.text-yellow-400]="checkingConnection"
+                            [class.text-green-400]="!checkingConnection && isBackendOnline"
+                            [class.text-red-400]="!checkingConnection && !isBackendOnline">
+
+                            {{
+                            checkingConnection
+                            ? 'Checking...'
+                            : (isBackendOnline ? 'Online' : 'Offline')
+                            }}
+
                         </p>
 
                     </div>
@@ -172,19 +180,17 @@
                 </div>
 
 
-
-
                 <!-- Input -->
 
 
                 <div class="mt-6 flex items-center rounded-xl border border-gray-700 bg-gray-950 px-2 py-2">
 
-                    <input [(ngModel)]="prompt" (keyup.enter)="startChat()"
-                        class="flex-1 bg-transparent px-3 py-2 text-white outline-none placeholder:text-gray-500"
+                    <input [(ngModel)]="prompt" (keyup.enter)="startChat()" [disabled]="!isBackendOnline"
+                        class="flex-1 bg-transparent px-3 py-2 text-white outline-none disabled:opacity-50"
                         placeholder="Ask Shiva AI..." />
 
-                    <button (click)="startChat()"
-                        class="rounded-lg bg-green-600 px-4 py-2 text-white transition hover:bg-green-700">
+                    <button (click)="startChat()" [disabled]="!isBackendOnline"
+                        class="rounded-lg bg-green-600 px-4 py-2 text-white transition hover:bg-green-700 disabled:bg-gray-700 disabled:cursor-not-allowed">
 
                         ➤
 
