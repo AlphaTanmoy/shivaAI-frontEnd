@@ -1,0 +1,218 @@
+<div class="country-container">
+
+    <!-- Header -->
+    <div class="header">
+
+        <h2>Countries</h2>
+
+        <span class="record-count">
+            {{ countries.length }}
+            @if(totalRecords > 0){
+                / {{ totalRecords }}
+            }
+        </span>
+
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                placeholder="Search country..."
+                [(ngModel)]="searchText"
+                (ngModelChange)="onSearchChange()">
+
+        </div>
+
+        <div class="filter-box">
+
+            <select
+                (change)="onServiceableChange($any($event.target).value)">
+
+                <option value="">
+                    All Countries
+                </option>
+
+                <option value="true">
+                    Serviceable
+                </option>
+
+                <option value="false">
+                    Non Serviceable
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+    <!-- Error -->
+
+    @if(errorMessage){
+
+        <div class="error-card">
+
+            <p>{{ errorMessage }}</p>
+
+            <button (click)="retry()">
+
+                Retry
+
+            </button>
+
+        </div>
+
+    }
+
+    <!-- Empty -->
+
+    @if(!loading && countries.length === 0){
+
+        <div class="empty-state">
+
+            <h3>No Countries Found</h3>
+
+            <p>
+                Try changing your search or filters.
+            </p>
+
+        </div>
+
+    }
+
+    <!-- Country List -->
+
+    <div class="country-grid">
+
+        @for(country of countries; track country.id){
+
+            <div class="country-card">
+
+                <div class="country-header">
+
+                    <h3>
+
+                        {{ country.name }}
+
+                    </h3>
+
+                    <span class="alpha">
+
+                        {{ country.alpha2 }}
+
+                    </span>
+
+                </div>
+
+                <div class="country-body">
+
+                    <div class="row">
+
+                        <label>Official Name</label>
+
+                        <span>
+
+                            {{ country.officialName }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="row">
+
+                        <label>ISD Code</label>
+
+                        <span>
+
+                            +{{ country.isdCode }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="row">
+
+                        <label>Alpha 3</label>
+
+                        <span>
+
+                            {{ country.alpha3 }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="row">
+
+                        <label>Example Number</label>
+
+                        <span>
+
+                            {{ country.exampleFormatForMobileNumber }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="row">
+
+                        <label>Created</label>
+
+                        <span>
+
+                            {{ country.createdDate | date:'mediumDate' }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+
+    <!-- Loading -->
+
+    @if(loading){
+
+        <div class="loading">
+
+            <div class="loader"></div>
+
+            <p>
+
+                Loading Countries...
+
+            </p>
+
+        </div>
+
+    }
+
+    <!-- No More Records -->
+
+    @if(!hasMore && countries.length > 0){
+
+        <div class="finished">
+
+            You've reached the end.
+
+        </div>
+
+    }
+
+    <!-- Infinite Scroll Anchor -->
+
+    <div
+        #scrollAnchor
+        class="scroll-anchor">
+    </div>
+
+</div>
