@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, timeout } from 'rxjs';
 
 import {
   ChatRequest,
@@ -17,13 +17,13 @@ export class ChatService {
 
   constructor(
     private http: HttpClient
-  ){}
+  ) { }
 
 
 
   sendMessage(
     request: ChatRequest
-  ): Observable<ChatResponse>{
+  ): Observable<ChatResponse> {
 
     return this.http.post<ChatResponse>(
       API.CHAT,
@@ -32,5 +32,10 @@ export class ChatService {
 
   }
 
+  checkConnection() {
+
+    return this.http.get(API.HEALTH);
+
+  }
 
 }
