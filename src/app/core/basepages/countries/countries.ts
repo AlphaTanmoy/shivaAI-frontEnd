@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
@@ -35,6 +36,8 @@ export class CountryComponent
   implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly countryService = inject(CountryService);
+
+  private readonly cdr = inject(ChangeDetectorRef);
 
   @ViewChild('scrollAnchor')
   scrollAnchor!: ElementRef<HTMLDivElement>;
@@ -151,6 +154,7 @@ export class CountryComponent
       .pipe(
         finalize(() => {
           this.loading = false;
+          this.cdr.detectChanges();
         })
       )
       .subscribe({
@@ -173,12 +177,17 @@ export class CountryComponent
             this.offsetToken.trim().length > 0 &&
             responseData.length >= this.pageSize;
 
+          this.loading = false;
+          this.cdr.detectChanges();
+
         },
 
         error: () => {
 
           this.errorMessage =
             'Unable to load countries.';
+
+          this.cdr.detectChanges();
 
         }
 
