@@ -1,33 +1,40 @@
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-    BehaviorSubject,
-    interval
-} from 'rxjs';
+import { BehaviorSubject, interval } from 'rxjs';
 
 import { API } from '../constants/api-list';
 import { NotificationService } from './NotificationService';
 import { NotificationType } from '../enums/NotificationType';
 import { NotificationAppearance } from '../enums/NotificationAppearance';
 
+
 @Injectable({
     providedIn: 'root'
 })
 export class HealthService {
 
+
     private backendStatusSubject =
         new BehaviorSubject<boolean>(false);
+
 
     readonly backendStatus$ =
         this.backendStatusSubject.asObservable();
 
+
+
     private checkingSubject =
         new BehaviorSubject<boolean>(true);
+
 
     readonly checking$ =
         this.checkingSubject.asObservable();
 
+
+
     private previousStatus: boolean | null = null;
+
+
 
     constructor(
         private http: HttpClient,
@@ -37,15 +44,22 @@ export class HealthService {
 
         this.checkBackend();
 
-        interval(30000).subscribe(() => {
 
-            this.checkBackend();
+        interval(30000)
+            .subscribe(() => {
 
-        });
+                this.checkBackend();
+
+            });
 
     }
 
+
+
     checkBackend(): void {
+
+
+        // Start checking
 
         this.zone.run(() => {
 
@@ -53,68 +67,98 @@ export class HealthService {
 
         });
 
-        this.http.get(API.HEALTH).subscribe({
 
-            next: () => {
 
-                this.zone.run(() => {
+        this.http.get<string>(API.HEALTH)
+            .subscribe({
 
-                    this.backendStatusSubject.next(true);
-                    this.checkingSubject.next(false);
 
-                    if (this.previousStatus !== true) {
+                next: () => {
 
-                        this.notificationService.open({
+                    this.zone.run(() => {
 
-                            message: 'Connected to Shiva AI Backend.',
 
-                            appearance: NotificationAppearance.TOP,
+                        this.backendStatusSubject.next(true);
 
-                            type: NotificationType.SUCCESS,
 
-                            action: null
+                        this.checkingSubject.next(false);
 
-                        });
 
-                    }
 
-                    this.previousStatus = true;
+                        if (this.previousStatus !== true) {
 
-                });
 
-            },
+                            this.notificationService.open({
 
-            error: () => {
+                                message: 'Connected to Shiva AI Backend.',
 
-                this.zone.run(() => {
+                                appearance: NotificationAppearance.TOP,
 
-                    this.backendStatusSubject.next(false);
-                    this.checkingSubject.next(false);
+                                type: NotificationType.SUCCESS,
 
-                    if (this.previousStatus !== false) {
+                                action: null
 
-                        this.notificationService.open({
+                            });
 
-                            message: 'Unable to connect to Shiva AI Backend.',
 
-                            appearance: NotificationAppearance.TOP,
+                        }
 
-                            type: NotificationType.ERROR,
 
-                            action: null
+                        this.previousStatus = true;
 
-                        });
 
-                    }
+                    });
 
-                    this.previousStatus = false;
 
-                });
 
-            }
+                },
 
-        });
+
+
+                error: () => {
+
+                    this.zone.run(() => {
+
+
+                        this.backendStatusSubject.next(false);
+
+
+                        this.checkingSubject.next(false);
+
+
+
+                        if (this.previousStatus !== false) {
+
+
+                            this.notificationService.open({
+
+                                message: 'Unable to connect to Shiva AI Backend.',
+
+                                appearance: NotificationAppearance.TOP,
+
+                                type: NotificationType.ERROR,
+
+                                action: null
+
+                            });
+
+
+                        }
+
+
+                        this.previousStatus = false;
+
+
+                    });
+
+
+                }
+
+
+            });
+
 
     }
+
 
 }

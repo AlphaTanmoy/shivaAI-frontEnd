@@ -4,9 +4,11 @@ import {
   ChangeDetectorRef,
   NgZone
 } from '@angular/core';
+
 import { RouterLink } from '@angular/router';
 
 import { HealthService } from '../../../core/services/HealthService';
+
 
 @Component({
   selector: 'app-navbar',
@@ -17,26 +19,45 @@ import { HealthService } from '../../../core/services/HealthService';
 })
 export class NavbarComponent implements OnInit {
 
+
   mobileMenuOpen = false;
 
   isBackendOnline = false;
+
+
 
   constructor(
     private healthService: HealthService,
     private zone: NgZone,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
 
-  ngOnInit() {
+
+
+  ngOnInit(): void {
+
 
     this.healthService.backendStatus$
       .subscribe(status => {
 
-        this.isBackendOnline = status;
+
+        this.zone.run(() => {
+
+
+          this.isBackendOnline = status;
+
+
+          this.cdr.detectChanges();
+
+
+        });
+
 
       });
 
+
   }
+
 
 
   toggleMenu(): void {
@@ -44,5 +65,6 @@ export class NavbarComponent implements OnInit {
     this.mobileMenuOpen = !this.mobileMenuOpen;
 
   }
+
 
 }
