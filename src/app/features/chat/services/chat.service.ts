@@ -6,15 +6,13 @@ import {
   ChatRequest,
   ChatResponse
 } from '../models/chat.model';
+import { API } from '../../../core/constants/api-list';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-
-
-  private apiUrl = 'http://localhost:9669/api/chat';
 
 
   constructor(
@@ -28,7 +26,7 @@ export class ChatService {
   ): Observable<ChatResponse>{
 
     return this.http.post<ChatResponse>(
-      this.apiUrl,
+      API.CHAT,
       request
     );
 

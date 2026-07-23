@@ -1,0 +1,68 @@
+@if(notification$ | async; as notification){
+
+    @if(notification.action){
+
+        <div class="overlay"></div>
+
+    }
+
+    <div
+        class="notification"
+
+        [ngClass]="{
+
+            'top': notification.appearance === 'TOP',
+
+            'top-left': notification.appearance === 'TOP_LEFT',
+
+            'bottom-right': notification.appearance === 'BOTTOM_RIGHT',
+
+            'success': notification.type === 'SUCCESS',
+
+            'warning': notification.type === 'WARNING',
+
+            'error': notification.type === 'ERROR'
+
+        }">
+
+        <div class="icon">
+
+            @switch(notification.type){
+
+                @case('SUCCESS'){
+                    ✔
+                }
+
+                @case('WARNING'){
+                    ⚠
+                }
+
+                @case('ERROR'){
+                    ✖
+                }
+
+            }
+
+        </div>
+
+        <div class="message">
+
+            {{ notification.message }}
+
+        </div>
+
+        @if(notification.action){
+
+            <button
+                class="action-btn"
+                (click)="close()">
+
+                {{ notification.action }}
+
+            </button>
+
+        }
+
+    </div>
+
+}
