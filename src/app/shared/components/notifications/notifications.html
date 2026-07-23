@@ -1,68 +1,45 @@
-@if(notification$ | async; as notification){
+@if (notification$ | async; as notification) {
 
-    @if(notification.action){
+@if (notification.action) {
+<div class="overlay"></div>
+}
 
-        <div class="overlay"></div>
+<div class="notification" [ngClass]="[
+            notification.appearance.toLowerCase().replace('_','-'),
+            notification.type.toLowerCase()
+        ]">
 
-    }
+    <div class="icon">
 
-    <div
-        class="notification"
+        @switch(notification.type){
 
-        [ngClass]="{
+        @case('SUCCESS'){ ✓ }
 
-            'top': notification.appearance === 'TOP',
+        @case('WARNING'){ ⚠ }
 
-            'top-left': notification.appearance === 'TOP_LEFT',
+        @case('ERROR'){ ✕ }
 
-            'bottom-right': notification.appearance === 'BOTTOM_RIGHT',
-
-            'success': notification.type === 'SUCCESS',
-
-            'warning': notification.type === 'WARNING',
-
-            'error': notification.type === 'ERROR'
-
-        }">
-
-        <div class="icon">
-
-            @switch(notification.type){
-
-                @case('SUCCESS'){
-                    ✔
-                }
-
-                @case('WARNING'){
-                    ⚠
-                }
-
-                @case('ERROR'){
-                    ✖
-                }
-
-            }
-
-        </div>
-
-        <div class="message">
-
-            {{ notification.message }}
-
-        </div>
-
-        @if(notification.action){
-
-            <button
-                class="action-btn"
-                (click)="close()">
-
-                {{ notification.action }}
-
-            </button>
-
+        @case('INFO'){ ℹ }
         }
 
     </div>
+
+    <div class="message">
+
+        {{ notification.message }}
+
+    </div>
+
+    @if(notification.action){
+
+    <button class="action" (click)="close()">
+
+        {{ notification.action }}
+
+    </button>
+
+    }
+
+</div>
 
 }
