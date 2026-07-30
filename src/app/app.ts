@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
-import { NavbarComponent } from './shared/components/navbar/navbar';
-import { NotificationComponent } from './shared/components/notifications/notifications';
+import { NotificationComponent } from './core/shared/notifications/notifications';
+import { NavbarComponent } from './core/shared/navbar/navbar';
 
 @Component({
     selector: 'app-root',

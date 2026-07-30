@@ -7,8 +7,8 @@ import {
 
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HealthService } from '../../services/HealthService';
 
-import { HealthService } from '../../../core/services/HealthService';
 
 
 @Component({
