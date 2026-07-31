@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.shivaai.com'
+  apiUrl: 'https://shivaai-backend.tanmoysyatraofficial.store'
 };
