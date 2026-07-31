@@ -1,4 +1,9 @@
+const shouldCallBackendServer = true;
+
 export const environment = {
   production: true,
-  apiUrl: 'https://shivaai-backend.tanmoysyatraofficial.store'
+  shouldCallBackendServer,
+  apiUrl: shouldCallBackendServer
+    ? 'https://shivaai-backend.tanmoysyatraofficial.store'
+    : 'http://localhost:9669',
 };
