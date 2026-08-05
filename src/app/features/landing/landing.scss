@@ -1,0 +1,15 @@
+.landing-auth-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 24px 0 0;
+}
+
+.landing-auth-links a {
+  text-decoration: none;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+}
