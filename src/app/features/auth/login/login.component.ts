@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -55,6 +56,8 @@ export class LoginComponent {
       )
       .subscribe({
         next: (response) => {
+          this.submitting = false;
+
           const accessToken = response.token ?? response.accessToken;
           const refreshToken = response.refreshToken ?? response.refresh_token;
 
@@ -79,14 +82,38 @@ export class LoginComponent {
 
           this.router.navigateByUrl(this.redirectPath);
         },
-        error: () => {
+        error: (error: HttpErrorResponse) => {
+          this.submitting = false;
+
+          const message = this.extractErrorMessage(error);
+
           this.notificationService.open({
-            message: 'Unable to login. Please verify your email and password.',
+            message,
             appearance: NotificationAppearance.TOP,
             type: NotificationType.ERROR,
             action: null
           });
         }
       });
+  }
+
+  private extractErrorMessage(error: HttpErrorResponse): string {
+    const rawError = error?.error;
+
+    if (typeof rawError === 'string') {
+      try {
+        const parsed = JSON.parse(rawError) as { message?: string; errorMessage?: string };
+        return parsed?.errorMessage ?? parsed?.message ?? 'Invalid Credentials';
+      } catch {
+        return rawError || 'Invalid Credentials';
+      }
+    }
+
+    if (rawError && typeof rawError === 'object') {
+      const payload = rawError as { message?: string; errorMessage?: string };
+      return payload?.errorMessage ?? payload?.message ?? 'Invalid Credentials';
+    }
+
+    return error?.message || 'Invalid Credentials';
   }
 }
