@@ -51,8 +51,9 @@ import {
             inputmode="numeric"
             maxlength="1"
             class="otp-box"
-            [value]="box"
-            (input)="onOtpBoxInput($event, i)"
+            [ngModel]="otpBoxes[i]"
+            (ngModelChange)="onOtpBoxChange($event, i)"
+            (ngModelChange)="onOtpBoxChange($event, i)"
             (keydown.backspace)="onOtpBoxBackspace($event, i)"
             (keydown.arrowleft)="onOtpBoxArrowLeft($event, i)"
             (keydown.arrowright)="onOtpBoxArrowRight($event, i)"
@@ -215,18 +216,15 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
     this.showOtpEntry = true;
   }
 
-  onOtpBoxInput(event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
-    const digit = input.value.replace(/\D/g, '').slice(0, 1);
+  onOtpBoxChange(value: string, index: number): void {
+    this.otpBoxes = [...this.otpBoxes];
+    this.otpBoxes[index] = value.replace(/\D/g, '').slice(0, 1);
 
-    this.otpBoxes[index] = digit;
     this.updateOtpCode();
 
-    if (digit && index < this.otpBoxes.length - 1) {
+    if (this.otpBoxes[index] && index < 5) {
       this.focusOtpBox(index + 1);
     }
-
-    this.changeDetectorRef.detectChanges();
   }
 
   onOtpBoxBackspace(event: Event, index: number): void {
@@ -276,7 +274,9 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
   }
 
   get isOtpComplete(): boolean {
-    return this.otpBoxes.every(box => box.length === 1);
+    const complete = this.otpBoxes.every(box => box.length === 1);
+    console.log(this.otpBoxes, complete);
+    return complete;
   }
 
   submitOtp(): void {
