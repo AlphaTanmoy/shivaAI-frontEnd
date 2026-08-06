@@ -90,4 +90,8 @@ export class HeroComponent implements OnInit {
 
   }
 
+  navigateToCustomerLogin(): void {
+    this.router.navigate(['/customer/login']);
+  }
+
 }
