@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { LoginRequest } from '../models/LoginRequest';
@@ -32,6 +32,41 @@ export class AuthApiService {
 
     const url = `${environment.apiUrl}/login/email`;
     return this.http.post<LoginResponse>(url, payload);
+  }
+
+  getProfile(): Observable<any> {
+    const accessToken = localStorage.getItem('accessToken');
+    const url = `${environment.apiUrl}/getProfile`;
+
+    const headers = accessToken?.trim()
+      ? new HttpHeaders({ Authorization: `Bearer ${accessToken.trim()}` })
+      : undefined;
+
+    return this.http.get<any>(url, {
+      headers
+    });
+  }
+
+  twoFactorInit(otpDeliveryChannel: string): Observable<any> {
+    const accessToken = localStorage.getItem('accessToken');
+    const url = `${environment.apiUrl}/twoFactor/init`;
+
+    const headers = accessToken?.trim()
+      ? new HttpHeaders({ Authorization: `Bearer ${accessToken.trim()}` })
+      : undefined;
+
+    return this.http.post<any>(url, { otpDeliveryChannel }, { headers });
+  }
+
+  validateTwoFactorOTP(otp: string, otpDeliveryChannel: string): Observable<any> {
+    const accessToken = localStorage.getItem('accessToken');
+    const url = `${environment.apiUrl}/twoFactor/validateTwoFactorOTP`;
+
+    const headers = accessToken?.trim()
+      ? new HttpHeaders({ Authorization: `Bearer ${accessToken.trim()}` })
+      : undefined;
+
+    return this.http.post<any>(url, { otp, otpDeliveryChannel }, { headers });
   }
 
   private getClientDevicePlatform(): string {

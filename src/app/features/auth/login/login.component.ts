@@ -35,6 +35,16 @@ export class LoginComponent {
   readonly pageTitle = this.userType === 'ADMIN' ? 'Admin Login' : 'Customer Login';
   readonly redirectPath = this.userType === 'ADMIN' ? '/countries' : '/chat';
 
+  private readonly twoFactorErrorCodes = new Set<number>([
+    403008,
+    403009,
+    403010,
+    403011,
+    403012,
+    403013,
+    403014
+  ]);
+
   submitting = false;
 
   submit(): void {
@@ -73,14 +83,34 @@ export class LoginComponent {
 
           this.authService.setTokens(accessToken, refreshToken);
 
-          this.notificationService.open({
-            message: 'Login successful.',
-            appearance: NotificationAppearance.TOP,
-            type: NotificationType.SUCCESS,
-            action: null
-          });
+          this.authApiService.getProfile().subscribe({
+            next: () => {
+              this.notificationService.open({
+                message: 'Login successful.',
+                appearance: NotificationAppearance.TOP,
+                type: NotificationType.SUCCESS,
+                action: null
+              });
+              this.router.navigateByUrl(this.redirectPath);
+            },
+            error: (profileError) => {
+              if (this.isTwoFactorError(profileError)) {
+                if (this.isTwoFactorRequiredError(profileError)) {
+                  this.router.navigateByUrl('/two-factor');
+                }
+                return;
+              }
 
-          this.router.navigateByUrl(this.redirectPath);
+              const message = this.extractErrorMessage(profileError);
+
+              this.notificationService.open({
+                message,
+                appearance: NotificationAppearance.TOP,
+                type: NotificationType.ERROR,
+                action: null
+              });
+            }
+          });
         },
         error: (error: HttpErrorResponse) => {
           this.submitting = false;
@@ -115,5 +145,41 @@ export class LoginComponent {
     }
 
     return error?.message || 'Invalid Credentials';
+  }
+
+  private isTwoFactorError(error: HttpErrorResponse): boolean {
+    const rawError = error?.error;
+    const payload = this.parseErrorPayload(rawError);
+    const code = payload?.code;
+
+    if (code === undefined || code === null) {
+      return false;
+    }
+
+    return this.twoFactorErrorCodes.has(Number(code));
+  }
+
+  private isTwoFactorRequiredError(error: HttpErrorResponse): boolean {
+    const rawError = error?.error;
+    const payload = this.parseErrorPayload(rawError);
+    const code = payload?.code;
+
+    return Number(code) === 403012;
+  }
+
+  private parseErrorPayload(rawError: unknown): { code?: number | string } | null {
+    if (typeof rawError === 'string') {
+      try {
+        return JSON.parse(rawError) as { code?: number | string };
+      } catch {
+        return null;
+      }
+    }
+
+    if (rawError && typeof rawError === 'object') {
+      return rawError as { code?: number | string };
+    }
+
+    return null;
   }
 }

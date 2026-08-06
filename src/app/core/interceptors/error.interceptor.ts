@@ -15,13 +15,29 @@ interface BackendErrorResponse {
   message?: string;
 }
 
+const TWO_FACTOR_ERROR_CODES = [
+  403008,
+  403009,
+  403010,
+  403011,
+  403012,
+  403013,
+  403014
+] as const;
+
+const TWO_FACTOR_ERROR_ROUTES = TWO_FACTOR_ERROR_CODES.reduce<Record<number, string[]>>((acc, code) => {
+  acc[code] = ['/two-factor'];
+  return acc;
+}, {});
+
 @Injectable({ providedIn: 'root' })
 export class ErrorInterceptor implements HttpInterceptor {
 
   private readonly routeByErrorCode: Record<number, string[]> = {
     1001: ['/two-factor'],
     401: ['/login'],
-    403: ['/']
+    403: ['/'],
+    ...TWO_FACTOR_ERROR_ROUTES
   };
 
   constructor(
