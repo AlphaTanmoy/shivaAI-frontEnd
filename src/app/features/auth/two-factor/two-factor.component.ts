@@ -190,6 +190,7 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
       next: () => {
         this.loading = false;
         this.showOtpEntry = true;
+        this.changeDetectorRef.detectChanges();
         this.startCountdown();
         this.notificationService.open({
           message: 'OTP sent. Enter it below to continue.',
@@ -367,6 +368,8 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
 
     this.countdownTimer = setInterval(() => {
       this.countdown--;
+
+      this.changeDetectorRef.detectChanges();
 
       if (this.countdown <= 0) {
         this.clearCountdownTimer();
