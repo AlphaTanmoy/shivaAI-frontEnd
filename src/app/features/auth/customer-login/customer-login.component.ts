@@ -6,6 +6,7 @@ import { LoginComponent } from '../login/login.component';
   selector: 'app-customer-login',
   standalone: true,
   imports: [LoginComponent],
-  template: `<app-login [userType]="'CUSTOMER'"></app-login>`
+  templateUrl: './customer-login.component.html',
+  styleUrls: ['./customer-login.component.scss']
 })
 export class CustomerLoginComponent {}

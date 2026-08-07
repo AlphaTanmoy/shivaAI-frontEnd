@@ -6,6 +6,7 @@ import { LoginComponent } from '../login/login.component';
   selector: 'app-admin-login',
   standalone: true,
   imports: [LoginComponent],
-  template: `<app-login [userType]="'ADMIN'"></app-login>`
+  templateUrl: './admin-login.component.html',
+  styleUrls: ['./admin-login.component.scss']
 })
 export class AdminLoginComponent {}

@@ -17,129 +17,8 @@ import {
   selector: 'app-two-factor',
   standalone: true,
   imports: [CommonModule, FormsModule, SingleSelectDropdownComponent],
-  template: `
-    <div class="two-factor-page">
-      <h1>Two Factor Authentication</h1>
-      <p>Please select a delivery channel to receive your OTP.</p>
-
-      <app-single-select-dropdown
-        label="Delivery channel"
-        placeholder="Select a channel"
-        [options]="options"
-        [selectedValue]="selectedChannel"
-        (selectionChange)="onChannelSelected($event)">
-      </app-single-select-dropdown>
-
-      <div class="actions">
-        <button
-          type="button"
-          (click)="sendOtp()"
-          [disabled]="loading || !selectedChannel || countdown > 0">
-          {{ loading ? 'Sending...' : countdown > 0 ? 'Resend OTP in ' + countdown + 's' : 'Send OTP' }}
-        </button>
-        <button type="button" (click)="openOtpEntry()">
-          Already Have OTP
-        </button>
-      </div>
-
-      <section *ngIf="showOtpEntry" class="otp-entry">
-        <h2>Enter your OTP</h2>
-        <div class="otp-boxes">
-          <input
-            *ngFor="let box of otpBoxes; let i = index"
-            type="text"
-            inputmode="numeric"
-            maxlength="1"
-            class="otp-box"
-            [ngModel]="otpBoxes[i]"
-            (ngModelChange)="onOtpBoxChange($event, i)"
-            (ngModelChange)="onOtpBoxChange($event, i)"
-            (keydown.backspace)="onOtpBoxBackspace($event, i)"
-            (keydown.arrowleft)="onOtpBoxArrowLeft($event, i)"
-            (keydown.arrowright)="onOtpBoxArrowRight($event, i)"
-            (paste)="onOtpBoxPaste($event)"
-            #otpInput
-          />
-        </div>
-        <button type="button" (click)="submitOtp()" [disabled]="!isOtpComplete">
-          Verify OTP
-        </button>
-      </section>
-    </div>
-  `,
-  styles: [
-    `
-      .two-factor-page {
-        max-width: 520px;
-        margin: 0 auto;
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1.25rem;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: 1.75rem;
-      }
-
-      p {
-        margin: 0;
-        color: #4d4d4d;
-      }
-
-      .actions {
-        display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-      }
-
-      button {
-        cursor: pointer;
-        padding: 0.85rem 1.3rem;
-        border: none;
-        border-radius: 0.5rem;
-        background: #0f62fe;
-        color: #ffffff;
-        font-weight: 600;
-      }
-
-      button[disabled] {
-        background: #8f9bb3;
-        cursor: not-allowed;
-      }
-
-      .otp-entry {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-top: 1rem;
-      }
-
-      .otp-boxes {
-        display: flex;
-        gap: 0.5rem;
-        justify-content: center;
-      }
-
-      .otp-box {
-        width: 3rem;
-        height: 3.5rem;
-        text-align: center;
-        font-size: 1.5rem;
-        font-weight: 600;
-        border-radius: 0.5rem;
-        border: 1px solid #d0d7e2;
-        outline: none;
-        transition: border-color 0.2s, box-shadow 0.2s;
-      }
-
-      .otp-box:focus {
-        border-color: #0f62fe;
-        box-shadow: 0 0 0 3px rgba(15, 98, 254, 0.15);
-      }
-    `
-  ]
+  templateUrl: './two-factor.component.html',
+  styleUrls: ['./two-factor.component.scss']
 })
 export class TwoFactorComponent implements OnInit, OnDestroy {
   private readonly authApiService = inject(AuthApiService);
@@ -216,7 +95,9 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
     this.showOtpEntry = true;
   }
 
-  onOtpBoxChange(value: string, index: number): void {
+  onOtpBoxChange(event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
     this.otpBoxes = [...this.otpBoxes];
     this.otpBoxes[index] = value.replace(/\D/g, '').slice(0, 1);
 
