@@ -475,7 +475,7 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
           this.notificationService.open({
             message: 'Using default delivery channels. ' + this.extractErrorMessage(error),
             appearance: NotificationAppearance.TOP,
-              type: NotificationType.WARNING,
+            type: NotificationType.WARNING,
             action: null
           });
 
@@ -554,8 +554,19 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.authService.clearTokens();
+    console.log('Logout clicked');
+
+    try {
+      this.authService.clearTokens();
+    } catch (error) {
+      console.error('AuthService clearTokens failed:', error);
+    }
+
     localStorage.clear();
-    this.router.navigateByUrl('/landing');
+    sessionStorage.clear();
+
+    this.router.navigate(['']).then(() => {
+      console.log('Redirected to landing page');
+    });
   }
 }
