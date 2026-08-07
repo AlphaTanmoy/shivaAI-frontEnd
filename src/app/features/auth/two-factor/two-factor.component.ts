@@ -159,23 +159,23 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
 
   onOtpBoxChange(event: Event, index: number): void {
 
-  const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement;
 
-  const value = input.value.replace(/\D/g, '').substring(0, 1);
+    const value = input.value.replace(/\D/g, '').substring(0, 1);
 
-  this.otpBoxes[index] = value;
+    this.otpBoxes[index] = value;
 
-  this.updateOtpCode();
+    this.updateOtpCode();
 
-  if (value && index < this.otpBoxes.length - 1) {
+    if (value && index < this.otpBoxes.length - 1) {
 
-    setTimeout(() => {
-      this.focusOtpBox(index + 1);
-    }, 0);
+      setTimeout(() => {
+        this.focusOtpBox(index + 1);
+      }, 0);
+
+    }
 
   }
-
-}
 
   onOtpBoxBackspace(event: Event, index: number): void {
     const keyboardEvent = event as KeyboardEvent;
@@ -248,14 +248,7 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
 
   onOtpBoxFocus(index: number): void {
 
-    const input = this.otpInputs?.get(index)?.nativeElement;
-
-    if (!input) {
-      return;
-    }
-
-    input.focus();
-    input.select();
+    const input = this.otpInputs.get(index)?.nativeElement;
 
     if (!input) {
       return;
@@ -275,16 +268,18 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
 
   private focusOtpBox(index: number): void {
 
-  const input = this.otpInputs.get(index)?.nativeElement;
+    const input = this.otpInputs.get(index)?.nativeElement;
 
-  if (!input) {
-    return;
+    if (!input) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      input.focus();
+      input.select();
+    });
+
   }
-
-  input.focus();
-  input.select();
-
-}
 
   submitOtp(): void {
 
@@ -533,32 +528,27 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
 
   }
 
-  debugInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    console.log('INPUT:', input.value);
-  }
-
   trackByIndex(index: number): number {
-  return index;
-}
-
-onOtpKeyDown(event: KeyboardEvent, index: number): void {
-
-  switch (event.key) {
-
-    case 'Backspace':
-      this.onOtpBoxBackspace(event, index);
-      break;
-
-    case 'ArrowLeft':
-      this.onOtpBoxArrowLeft(event, index);
-      break;
-
-    case 'ArrowRight':
-      this.onOtpBoxArrowRight(event, index);
-      break;
-
+    return index;
   }
 
-}
+  onOtpKeyDown(event: KeyboardEvent, index: number): void {
+
+    switch (event.key) {
+
+      case 'Backspace':
+        this.onOtpBoxBackspace(event, index);
+        break;
+
+      case 'ArrowLeft':
+        this.onOtpBoxArrowLeft(event, index);
+        break;
+
+      case 'ArrowRight':
+        this.onOtpBoxArrowRight(event, index);
+        break;
+
+    }
+
+  }
 }
