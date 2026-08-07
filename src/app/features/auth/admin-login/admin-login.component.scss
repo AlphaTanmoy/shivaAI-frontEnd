@@ -1,0 +1,19 @@
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: url('/loginBG.png') center center no-repeat;
+  background-size: cover;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-card {
+  width: 100%;
+  border-radius: 38px;
+  padding: 0px;
+  position: relative;
+  z-index: 1;
+  border: none;
+}
