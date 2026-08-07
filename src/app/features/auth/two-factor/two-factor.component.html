@@ -1,5 +1,7 @@
 <div class="two-factor-page">
+
   <h1>Two Factor Authentication</h1>
+
   <p>Please select a delivery channel to receive your OTP.</p>
 
   <app-single-select-dropdown
@@ -11,37 +13,66 @@
   </app-single-select-dropdown>
 
   <div class="actions">
+
     <button
       type="button"
       (click)="sendOtp()"
       [disabled]="loading || !selectedChannel || countdown > 0">
-      {{ loading ? 'Sending...' : countdown > 0 ? 'Resend OTP in ' + countdown + 's' : 'Send OTP' }}
+
+      {{ loading
+          ? 'Sending...'
+          : countdown > 0
+              ? ('Resend OTP in ' + countdown + 's')
+              : 'Send OTP' }}
+
     </button>
-    <button type="button" (click)="openOtpEntry()">
+
+    <button
+      type="button"
+      (click)="openOtpEntry()">
+
       Already Have OTP
+
     </button>
+
   </div>
 
-  <section *ngIf="showOtpEntry" class="otp-entry">
+  <section
+    *ngIf="showOtpEntry"
+    class="otp-entry">
+
     <h2>Enter your OTP</h2>
+
     <div class="otp-boxes">
+
       <input
-        *ngFor="let box of otpBoxes; let i = index"
+        *ngFor="let box of otpBoxes; let i = index; trackBy: trackByIndex"
+        #otpInput
+        class="otp-box"
         type="text"
         inputmode="numeric"
         maxlength="1"
-        class="otp-box"
-        [ngModel]="otpBoxes[i]"
+        autocomplete="off"
+        spellcheck="false"
+
+        [value]="box"
+
+        (focus)="onOtpBoxFocus(i)"
         (input)="onOtpBoxChange($event, i)"
-        (keydown.backspace)="onOtpBoxBackspace($event, i)"
-        (keydown.arrowleft)="onOtpBoxArrowLeft($event, i)"
-        (keydown.arrowright)="onOtpBoxArrowRight($event, i)"
-        (paste)="onOtpBoxPaste($event)"
-        #otpInput
-      />
+        (keydown)="onOtpKeyDown($event, i)"
+        (paste)="onOtpBoxPaste($event)" />
+
     </div>
-    <button type="button" (click)="submitOtp()" [disabled]="!isOtpComplete">
-      Verify OTP
+
+    <button
+      type="button"
+      (click)="submitOtp()"
+      [disabled]="loading || !isOtpComplete">
+
+      {{ loading ? 'Verifying...' : 'Verify OTP' }}
+
     </button>
+
   </section>
+
 </div>
