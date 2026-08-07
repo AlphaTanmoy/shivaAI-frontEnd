@@ -12,7 +12,9 @@
 }
 
 :host {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
   background: url('/loginBG.png') center center no-repeat;
   background-size: cover;
@@ -23,6 +25,65 @@ h1 {
   margin: 0;
   font-size: 1.75rem;
   color: #0039CC;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid #0039CC;
+  color: #0039CC;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  align-self: center;
+  margin-top: 8px;
+}
+
+.logout-btn:hover {
+  background: #0039CC;
+  color: white;
+}
+
+.no-options {
+  color: #64748b;
+  font-style: italic;
+  padding: 12px;
+  text-align: center;
+}
+
+.radio-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.radio-option:hover {
+  border-color: #0039CC;
+  background: rgba(0, 57, 204, 0.05);
+}
+
+.radio-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #0039CC;
+  cursor: pointer;
+}
+
+.radio-label {
+  font-weight: 500;
+  color: #0f172a;
 }
 
 p {

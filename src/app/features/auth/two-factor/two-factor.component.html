@@ -4,13 +4,21 @@
 
   <p>Please select a delivery channel to receive your OTP.</p>
 
-  <app-single-select-dropdown
-    label="Delivery channel"
-    placeholder="Select a channel"
-    [options]="options"
-    [selectedValue]="selectedChannel"
-    (selectionChange)="onChannelSelected($event)">
-  </app-single-select-dropdown>
+  <div class="radio-options" *ngIf="options.length > 0">
+    <label *ngFor="let option of options" class="radio-option">
+      <input
+        type="radio"
+        [name]="'delivery-channel'"
+        [value]="option.value"
+        [(ngModel)]="selectedChannel"
+        [disabled]="loading">
+      <span class="radio-label">{{ option.label }}</span>
+    </label>
+  </div>
+
+  <div class="no-options" *ngIf="options.length === 0">
+    Loading delivery channels...
+  </div>
 
   <div class="actions">
 
@@ -74,5 +82,7 @@
     </button>
 
   </section>
+
+  <button class="logout-btn" type="button" (click)="logout()">Logout</button>
 
 </div>

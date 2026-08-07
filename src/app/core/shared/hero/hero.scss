@@ -1,0 +1,256 @@
+.hero-section {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  overflow: hidden;
+  background: #0f172a;
+  padding: 96px 24px 24px;
+}
+
+.background-glow {
+  position: absolute;
+  left: 50%;
+  top: 80px;
+  height: 384px;
+  width: 384px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(0, 57, 204, 0.2);
+  filter: blur(96px);
+}
+
+.hero-content {
+  position: relative;
+  display: grid;
+  max-width: 1280px;
+  margin: 0 auto;
+  gap: 64px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .hero-content {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.left-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.badge {
+  display: inline-block;
+  margin-bottom: 24px;
+  padding: 8px 20px;
+  border: 1px solid rgba(0, 57, 204, 0.3);
+  border-radius: 9999px;
+  background: rgba(0, 57, 204, 0.1);
+  font-size: 14px;
+  color: #00A2FF;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #ffffff;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: 60px;
+  }
+}
+
+.hero-title .highlight {
+  color: #0039CC;
+}
+
+.hero-description {
+  margin-top: 24px;
+  max-width: 576px;
+  font-size: 18px;
+  line-height: 1.75;
+  color: #9ca3af;
+}
+
+.hero-buttons {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.primary-btn {
+  border-radius: 12px;
+  background: #0039CC;
+  padding: 12px 28px;
+  font-weight: 600;
+  color: #ffffff;
+  transition: background 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background: #002999;
+}
+
+.secondary-btn {
+  border-radius: 12px;
+  border: 1px solid #374151;
+  padding: 12px 28px;
+  font-weight: 600;
+  color: #d1d5db;
+  transition: all 0.2s;
+  background: transparent;
+  cursor: pointer;
+}
+
+.secondary-btn:hover {
+  border-color: #0039CC;
+  color: #00A2FF;
+}
+
+.stats {
+  margin-top: 48px;
+  display: flex;
+  gap: 40px;
+}
+
+.stat-item h3 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.stat-item p {
+  color: #6b7280;
+  margin: 4px 0 0 0;
+}
+
+.right-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-card {
+  width: 100%;
+  max-width: 448px;
+  border-radius: 24px;
+  border: 1px solid #1f2937;
+  background: rgba(17, 24, 39, 0.7);
+  padding: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+}
+
+.card-header {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.om-icon {
+  display: flex;
+  height: 48px;
+  width: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #0039CC;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.card-title {
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.status-text {
+  font-size: 14px;
+  margin: 4px 0 0 0;
+}
+
+.status-text.checking {
+  color: #fbbf24;
+}
+
+.status-text.online {
+  color: #4ade80;
+}
+
+.status-text.offline {
+  color: #f87171;
+}
+
+.chat-message {
+  border-radius: 16px;
+  background: #1f2937;
+  padding: 16px;
+  color: #d1d5db;
+  margin-bottom: 16px;
+}
+
+.ai-response {
+  margin-top: 16px;
+  border-radius: 16px;
+  background: rgba(0, 57, 204, 0.2);
+  padding: 16px;
+  color: #00A2FF;
+}
+
+.input-container {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px solid #374151;
+  background: #030712;
+  padding: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  background: transparent;
+  padding: 8px 12px;
+  color: #ffffff;
+  border: none;
+  outline: none;
+}
+
+.chat-input::placeholder {
+  color: #6b7280;
+}
+
+.chat-input:disabled {
+  opacity: 0.5;
+}
+
+.send-btn {
+  border-radius: 8px;
+  background: #0039CC;
+  padding: 8px 16px;
+  color: #ffffff;
+  transition: background 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.send-btn:hover {
+  background: #002999;
+}
+
+.send-btn:disabled {
+  background: #374151;
+  cursor: not-allowed;
+}

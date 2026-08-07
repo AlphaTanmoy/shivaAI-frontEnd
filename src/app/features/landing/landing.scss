@@ -7,9 +7,14 @@
 
 .landing-auth-links a {
   text-decoration: none;
-  background: #0f172a;
+  background: #0039CC;
   color: #ffffff;
   padding: 10px 16px;
   border-radius: 999px;
   font-weight: 700;
+  transition: background 0.2s;
+}
+
+.landing-auth-links a:hover {
+  background: #002999;
 }

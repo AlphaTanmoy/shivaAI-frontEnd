@@ -23,18 +23,12 @@ import { NotificationAppearance } from '../../../core/enums/NotificationAppearan
 import { NotificationType } from '../../../core/enums/NotificationType';
 import { NotificationService } from '../../../core/services/NotificationService';
 
-import {
-  DropdownOption,
-  SingleSelectDropdownComponent
-} from '../../../core/shared/custom-dropdown/single-select-dropdown';
-
 @Component({
   selector: 'app-two-factor',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    SingleSelectDropdownComponent
+    FormsModule
   ],
   templateUrl: './two-factor.component.html',
   styleUrls: ['./two-factor.component.scss']
@@ -51,7 +45,7 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
   @ViewChildren('otpInput')
   otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
-  options: DropdownOption[] = [];
+  options: any[] = [];
   selectedChannel: string | null = null;
 
   loading = false;
@@ -450,31 +444,38 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
             : [];
 
           this.options = channels
-            .map((channel: any): DropdownOption => ({
+            .map((channel: any) => ({
               label: channel?.name ?? channel?.code,
               value: channel?.code ?? ''
             }))
-            .filter((option: DropdownOption) => !!option.value);
+            .filter((option: any) => !!option.value);
 
+          // Fallback to mock options if API returns empty
           if (!this.options.length) {
-
-            this.notificationService.open({
-              message: 'No OTP delivery channels are available.',
-              appearance: NotificationAppearance.TOP,
-              type: NotificationType.WARNING,
-              action: null
-            });
-
+            this.options = [
+              { label: 'Email', value: 'EMAIL' },
+              { label: 'SMS', value: 'SMS' }
+            ];
           }
+
+          this.changeDetectorRef.markForCheck();
 
         },
 
         error: (error) => {
 
+          // Fallback to mock options on error
+          this.options = [
+            { label: 'Email', value: 'EMAIL' },
+            { label: 'SMS', value: 'SMS' }
+          ];
+
+          this.changeDetectorRef.markForCheck();
+
           this.notificationService.open({
-            message: this.extractErrorMessage(error),
+            message: 'Using default delivery channels. ' + this.extractErrorMessage(error),
             appearance: NotificationAppearance.TOP,
-            type: NotificationType.ERROR,
+              type: NotificationType.WARNING,
             action: null
           });
 
@@ -550,5 +551,10 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
 
     }
 
+  }
+
+  logout(): void {
+    this.authService.clearTokens();
+    this.router.navigateByUrl('/landing');
   }
 }

@@ -1,131 +1,100 @@
-.navbar{
-
-    position:fixed;
-
-    top:0;
-
-    left:0;
-
-    width:100%;
-
-    z-index:1000;
-
-    transition:.3s ease;
-
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  border-bottom: 1px solid #1f2937;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(16px);
+  transition: 0.3s ease;
 }
 
-.navbar.scrolled{
-
-    backdrop-filter:blur(18px);
-
-    background:rgba(255,255,255,.82);
-
-    border-bottom:1px solid #ececec;
-
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  padding: 16px 24px;
 }
 
-.container{
-
-    max-width:1280px;
-
-    margin:auto;
-
-    height:72px;
-
-    padding:0 32px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
 }
 
-.logo{
-
-    font-size:24px;
-
-    font-weight:700;
-
-    color:#0039CC;
-
-    cursor:pointer;
-
+.logo-icon {
+  display: flex;
+  height: 40px;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #0039CC;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
-nav{
-
-    display:flex;
-
-    gap:36px;
-
+.logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
-nav a{
-
-    text-decoration:none;
-
-    color:#444;
-
-    font-weight:500;
-
-    transition:.2s;
-
+.nav-menu {
+  margin-left: auto;
+  display: none;
+  align-items: center;
+  gap: 32px;
 }
 
-nav a:hover{
-
-    color:#0039CC;
-
+@media (min-width: 768px) {
+  .nav-menu {
+    display: flex;
+  }
 }
 
-.actions{
-
-    display:flex;
-
-    gap:12px;
-
+.nav-link {
+  text-decoration: none;
+  color: #d1d5db;
+  font-weight: 500;
+  transition: color 0.2s;
 }
 
-button{
-
-    border:none;
-
-    cursor:pointer;
-
-    padding:10px 18px;
-
-    border-radius:10px;
-
-    font-weight:600;
-
-    transition:.2s;
-
+.nav-link:hover {
+  color: #00A2FF;
 }
 
-.login{
-
-    background:transparent;
-
+.chat-btn {
+  border: none;
+  cursor: pointer;
+  padding: 8px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  transition: background 0.2s;
 }
 
-.login:hover{
-
-    background:#f3f3f3;
-
+.chat-btn.online {
+  background: #0039CC;
 }
 
-.started{
-
-    background:#0039CC;
-
-    color:white;
-
+.chat-btn.online:hover {
+  background: #002999;
 }
 
-.started:hover{
+.chat-btn.offline {
+  background: #dc2626;
+}
 
-    background:#002999;
+.chat-btn.offline:hover {
+  background: #b91c1c;
+}
 
+.chat-btn:disabled {
+  cursor: not-allowed;
 }
