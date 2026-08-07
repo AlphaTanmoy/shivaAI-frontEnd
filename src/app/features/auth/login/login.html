@@ -11,14 +11,32 @@
         <input formControlName="emailId" type="email" placeholder="name@example.com" />
       </label>
 
-      <label>
+      <label class="password-label">
         <span>Password</span>
-        <input formControlName="password" type="password" placeholder="Enter password" />
+        <div class="password-input-wrapper">
+          <input 
+            formControlName="password" 
+            [type]="hidePassword ? 'password' : 'text'" 
+            placeholder="Enter password" />
+          <button 
+            type="button" 
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'">
+            {{ hidePassword ? '👁️' : '🙈' }}
+          </button>
+        </div>
       </label>
 
       <button type="submit" [disabled]="submitting">
         {{ submitting ? 'Signing in...' : 'Login' }}
       </button>
     </form>
+
+    <div class="swap-login">
+      <button type="button" class="swap-btn" (click)="swapLoginType()">
+        Switch to {{ userType === 'ADMIN' ? 'Customer' : 'Admin' }} Login
+      </button>
+    </div>
   </div>
 </section>

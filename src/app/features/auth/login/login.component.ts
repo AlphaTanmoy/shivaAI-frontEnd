@@ -46,6 +46,16 @@ export class LoginComponent {
   ]);
 
   submitting = false;
+  hidePassword = true;
+
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
+  }
+
+  swapLoginType(): void {
+    const targetPath = this.userType === 'ADMIN' ? '/customer/login' : '/admin/login';
+    this.router.navigateByUrl(targetPath);
+  }
 
   submit(): void {
     if (this.loginForm.invalid) {

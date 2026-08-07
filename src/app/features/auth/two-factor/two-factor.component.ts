@@ -555,6 +555,7 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authService.clearTokens();
+    localStorage.clear();
     this.router.navigateByUrl('/landing');
   }
 }

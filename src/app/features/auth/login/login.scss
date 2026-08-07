@@ -60,3 +60,55 @@
   opacity: 0.65;
   cursor: not-allowed;
 }
+
+.password-label {
+  position: relative;
+}
+
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  padding-right: 8px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 1px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.password-toggle:hover {
+  opacity: 0.7;
+}
+
+.swap-login {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.swap-btn {
+  background: transparent;
+  border: none;
+  color: #0039CC;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.swap-btn:hover {
+  background: rgba(0, 57, 204, 0.1);
+}
