@@ -17,7 +17,7 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthApiService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   login(email: string, password: string, userType: 'ADMIN' | 'CUSTOMER'): Observable<LoginResponse> {
     const payload: LoginRequest = {
@@ -102,5 +102,14 @@ export class AuthApiService {
     const generated = crypto.randomUUID();
     localStorage.setItem(storageKey, generated);
     return generated;
+  }
+
+  changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    const url = `${environment.apiUrl}/changePassword`;
+
+    return this.http.post<any>(url, {
+      oldPassword,
+      newPassword
+    });
   }
 }
