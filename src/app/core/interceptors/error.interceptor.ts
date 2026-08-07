@@ -20,16 +20,16 @@ interface BackendErrorResponse {
 export class ErrorInterceptor implements HttpInterceptor {
 
   private readonly routeByErrorCode: Record<number, string[]> = {
-  403010: ['/change-password'],
-  403012: ['/two-factor'],
-  401: ['/login'],
-  403: ['/']
-};
+    403010: ['/change-password'],
+    403012: ['/two-factor'],
+    401: ['/login'],
+    403: ['/']
+  };
 
   constructor(
     private router: Router,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   intercept(
     request: HttpRequest<unknown>,
@@ -39,7 +39,19 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
 
+        console.log('========== ErrorInterceptor ==========');
+        console.log('Request URL:', request.url);
+        console.log('HTTP Status:', error.status);
+        console.log('Raw Error:', error.error);
+
         const backendError = this.extractError(error);
+
+        console.log('Extracted Error:', backendError);
+        console.log('Error Code:', backendError.code);
+
+        const route = this.routeByErrorCode[Number(backendError.code)];
+
+        console.log('Mapped Route:', route);
 
         this.notificationService.open({
           message: backendError.errorMessage || 'Something went wrong. Please try again.',
@@ -48,13 +60,17 @@ export class ErrorInterceptor implements HttpInterceptor {
           action: null
         });
 
-        if (backendError.code !== undefined && Number.isFinite(Number(backendError.code))) {
-          const route = this.routeByErrorCode[Number(backendError.code)];
+        if (route) {
+          console.log('Navigating to:', route);
 
-          if (route) {
-            this.router.navigate(route);
-          }
+          this.router.navigate(route).then(result => {
+            console.log('Navigation Result:', result);
+          });
+        } else {
+          console.log('No route found for error code:', backendError.code);
         }
+
+        console.log('======================================');
 
         return throwError(() => backendError);
       })

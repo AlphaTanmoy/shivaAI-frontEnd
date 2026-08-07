@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -35,15 +34,6 @@ export class LoginComponent {
   readonly pageTitle = this.userType === 'ADMIN' ? 'Admin Login' : 'Customer Login';
   readonly redirectPath = this.userType === 'ADMIN' ? '/countries' : '/chat';
 
-  private readonly twoFactorErrorCodes = new Set<number>([
-    403008,
-    403009,
-    403010,
-    403011,
-    403012,
-    403013,
-    403014
-  ]);
 
   submitting = false;
   hidePassword = true;
@@ -56,6 +46,7 @@ export class LoginComponent {
     const targetPath = this.userType === 'ADMIN' ? '/customer/login' : '/admin/login';
     this.router.navigateByUrl(targetPath);
   }
+
 
   submit(): void {
     if (this.loginForm.invalid) {
@@ -76,8 +67,6 @@ export class LoginComponent {
       )
       .subscribe({
         next: (response) => {
-          this.submitting = false;
-
           const accessToken = response.token ?? response.accessToken;
           const refreshToken = response.refreshToken ?? response.refresh_token;
 
@@ -101,95 +90,22 @@ export class LoginComponent {
                 type: NotificationType.SUCCESS,
                 action: null
               });
+
               this.router.navigateByUrl(this.redirectPath);
             },
-            error: (profileError) => {
-              if (this.isTwoFactorError(profileError)) {
-                if (this.isTwoFactorRequiredError(profileError)) {
-                  this.router.navigateByUrl('/two-factor');
-                }
-                return;
-              }
-
-              const message = this.extractErrorMessage(profileError);
-
-              this.notificationService.open({
-                message,
-                appearance: NotificationAppearance.TOP,
-                type: NotificationType.ERROR,
-                action: null
-              });
+            error: (error) => {
+              console.log('===== getProfile ERROR =====');
+              console.log(error);
+              console.log('Error type:', error.constructor.name);
+              console.log('============================');
+              // ErrorInterceptor should have already handled this.
             }
-          });
-        },
-        error: (error: HttpErrorResponse) => {
-          this.submitting = false;
-
-          const message = this.extractErrorMessage(error);
-
-          this.notificationService.open({
-            message,
-            appearance: NotificationAppearance.TOP,
-            type: NotificationType.ERROR,
-            action: null
           });
         }
       });
-  }
-
-  private extractErrorMessage(error: HttpErrorResponse): string {
-    const rawError = error?.error;
-
-    if (typeof rawError === 'string') {
-      try {
-        const parsed = JSON.parse(rawError) as { message?: string; errorMessage?: string };
-        return parsed?.errorMessage ?? parsed?.message ?? 'Invalid Credentials';
-      } catch {
-        return rawError || 'Invalid Credentials';
-      }
     }
 
-    if (rawError && typeof rawError === 'object') {
-      const payload = rawError as { message?: string; errorMessage?: string };
-      return payload?.errorMessage ?? payload?.message ?? 'Invalid Credentials';
+    forgotPassword(): void {
+      this.router.navigate(['/forgot-password']);
     }
-
-    return error?.message || 'Invalid Credentials';
   }
-
-  private isTwoFactorError(error: HttpErrorResponse): boolean {
-    const rawError = error?.error;
-    const payload = this.parseErrorPayload(rawError);
-    const code = payload?.code;
-
-    if (code === undefined || code === null) {
-      return false;
-    }
-
-    return this.twoFactorErrorCodes.has(Number(code));
-  }
-
-  private isTwoFactorRequiredError(error: HttpErrorResponse): boolean {
-    const rawError = error?.error;
-    const payload = this.parseErrorPayload(rawError);
-    const code = payload?.code;
-
-    return Number(code) === 403012;
-  }
-
-  private parseErrorPayload(rawError: unknown): { code?: number | string } | null {
-    if (typeof rawError === 'string') {
-      try {
-        return JSON.parse(rawError) as { code?: number | string };
-      } catch {
-        return null;
-      }
-    }
-
-    if (rawError && typeof rawError === 'object') {
-      return rawError as { code?: number | string };
-    }
-
-    return null;
-  }
-}

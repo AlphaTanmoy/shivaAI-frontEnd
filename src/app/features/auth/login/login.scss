@@ -94,12 +94,27 @@
 }
 
 .swap-login {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
   margin-top: 16px;
-  text-align: center;
+}
+
+.swap-login button {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.swap-login .swap-btn,
+.swap-login .forgot-password-btn {
+  width: auto !important;
+  display: inline-flex;
 }
 
 .swap-btn {
-  background: transparent;
+  background: rgba(0, 58, 204, 0.1);
   border: none;
   color: #0039CC;
   font-weight: 600;
@@ -110,5 +125,22 @@
 }
 
 .swap-btn:hover {
-  background: rgba(0, 57, 204, 0.1);
+  background: rgba(0, 57, 204, 1);
+  color: #ffffff;
+}
+
+.forgot-password-btn {
+  background:  rgba(255, 0, 0, 0.1);
+  border: none;
+  color: #ff0000;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.forgot-password-btn:hover {
+  background: rgba(255, 0, 0, 1);
+  color: #ffffff;
 }
